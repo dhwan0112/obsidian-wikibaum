@@ -63,6 +63,12 @@ settings:
     type: class-toggle
     default: false
   -
+    id: aw-plain-graph
+    title: Plain graph colors
+    description: Use Obsidian's default grey graph instead of the wiki palette.
+    type: class-toggle
+    default: false
+  -
     id: aw-colors
     title: Colors
     type: heading
@@ -108,7 +114,11 @@ body {
     "Malgun Gothic", "Segoe UI", sans-serif;
 
   --file-line-width: 880px;
-  --line-height-normal: 1.6;
+  /* Measured on the wiki: 22.5px line pitch on 15px text, one blank line between paragraphs */
+  --line-height-normal: 1.5;
+  --p-spacing: 1.5em;
+  /* Obsidian derives heading spacing from --p-spacing (x2.5); keep it at the default */
+  --heading-spacing: 2.5rem;
 
   /* Heading scale: H1 plays the role of a wiki "== section ==" */
   --inline-title-size: 2.4em;
@@ -264,6 +274,47 @@ body.aw-numbers-from-h2 {
   --h6-size: 1.05em;
 }
 
+/* ---------- Graph view ----------
+ * Same meaning as links in the text: existing notes take the link color,
+ * missing notes the unresolved-link red, and the open note stands out in white.
+ */
+body.theme-dark:not(.aw-plain-graph) {
+  --graph-node: var(--aw-link);
+  --graph-node-unresolved: var(--aw-link-missing);
+  --graph-node-focused: #ffffff;
+  --graph-node-tag: #5cc463;
+  --graph-node-attachment: #6cb2f0;
+  --graph-line: #4a4d52;
+  --graph-text: #e0e0e0;
+  --aw-graph-line-highlight: var(--aw-link);
+  --aw-graph-node-highlight: #ffffff;
+}
+body.theme-light:not(.aw-plain-graph) {
+  --graph-node: var(--aw-link);
+  --graph-node-unresolved: var(--aw-link-missing);
+  --graph-node-focused: var(--aw-brand);
+  --graph-node-tag: #008000;
+  --graph-node-attachment: #7a5cc2;
+  --graph-line: #c4c4c4;
+  --graph-text: #373a3c;
+  --aw-graph-line-highlight: var(--aw-link);
+  --aw-graph-node-highlight: var(--aw-brand);
+}
+/* Hover colors have no variable; the graph reads them from these classes */
+body:not(.aw-plain-graph) .graph-view.color-line-highlight {
+  color: var(--aw-graph-line-highlight);
+}
+body:not(.aw-plain-graph) .graph-view.color-fill-highlight {
+  color: var(--aw-graph-node-highlight);
+}
+
+/* Graph settings panel as a wiki card */
+.graph-controls {
+  background-color: var(--background-primary);
+  border: 1px solid var(--aw-card-border, var(--background-modifier-border));
+  border-radius: 5px;
+}
+
 /* ---------- 2. Brand-colored tab bar ---------- */
 
 body:not(.aw-no-brand-bar) .workspace-split.mod-root .workspace-tab-header-container {
@@ -307,6 +358,22 @@ body:not(.aw-hide-fold-arrows) .markdown-source-view.mod-cm6 .HyperMD-header .cm
   opacity: 1;
   --collapse-icon-color: var(--aw-fold-arrow);
   color: var(--aw-fold-arrow);
+}
+
+/* Reading view: the fold arrow sits inside the heading, before the number, as on the wiki */
+body:not(.aw-hide-fold-arrows) .markdown-rendered :is(h1, h2, h3, h4, h5, h6):has(> .heading-collapse-indicator) {
+  position: relative;
+  padding-left: 28px;
+}
+body:not(.aw-hide-fold-arrows) .markdown-rendered :is(h1, h2, h3, h4, h5, h6) > .heading-collapse-indicator {
+  position: absolute;
+  left: 2px;
+  top: 0;
+  bottom: 0.2em;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
 }
 
 /* ---------- 4. Section numbers ----------
@@ -436,6 +503,10 @@ body.aw-numbers-from-h2.aw-numbers-live-preview:not(.aw-no-heading-numbers) .is-
 .markdown-rendered .footnote-link {
   color: var(--aw-link);
   text-decoration: none;
+}
+.markdown-rendered sup {
+  /* Footnote marks should not push lines apart */
+  line-height: 0;
 }
 .markdown-rendered section.footnotes {
   border-top: 1px solid var(--aw-border);

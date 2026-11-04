@@ -24,7 +24,7 @@ settings:
   -
     id: aw-numbers-from-h2
     title: Start numbering at H2
-    description: Treat H1 as a title and number from H2, like wiki pages that use == heading == as the first level.
+    description: For notes that use H1 as the page title. H2 becomes the first numbered level and takes the largest section size.
     type: class-toggle
     default: false
   -
@@ -51,6 +51,12 @@ settings:
     type: class-toggle
     default: false
   -
+    id: aw-hide-fold-arrows
+    title: Show fold arrows only on hover
+    description: By default the heading fold arrows stay visible, as on wiki pages.
+    type: class-toggle
+    default: false
+  -
     id: aw-colors
     title: Colors
     type: heading
@@ -59,18 +65,18 @@ settings:
   -
     id: aw-brand
     title: Brand color
-    description: Tab bar and accent color.
+    description: Tab bar color.
     type: variable-themed-color
     format: hex
     default-light: '#00a495'
-    default-dark: '#00897c'
+    default-dark: '#2e3033'
   -
     id: aw-link
     title: Link color
     type: variable-themed-color
     format: hex
     default-light: '#0275d8'
-    default-dark: '#6cb2f0'
+    default-dark: '#ec9f19'
   -
     id: aw-link-missing
     title: Unresolved link color
@@ -84,7 +90,7 @@ settings:
     type: variable-themed-color
     format: hex
     default-light: '#008000'
-    default-dark: '#5cc463'
+    default-dark: '#009900'
 */
 
 /* ---------- 1. Tokens ---------- */
@@ -99,7 +105,7 @@ body {
   --line-height-normal: 1.6;
 
   /* Heading scale: H1 plays the role of a wiki "== section ==" */
-  --inline-title-size: 2.2em;
+  --inline-title-size: 2.4em;
   --inline-title-weight: 700;
   --h1-size: 1.8em;
   --h2-size: 1.5em;
@@ -143,7 +149,7 @@ body {
 
   /* Properties box, styled like a category box */
   --metadata-border-width: 1px;
-  --metadata-border-color: var(--aw-border);
+  --metadata-border-color: var(--aw-category-border);
   --metadata-border-radius: 0;
   --metadata-padding: 0.4em 0.8em;
 
@@ -171,6 +177,8 @@ body {
   --aw-quote-bar: #71bc6d;
   --aw-quote-bg: #eeeeee;
   --aw-on-brand: #ffffff;
+  --aw-category-border: var(--aw-border);
+  --aw-fold-arrow: #999999;
 
   --accent-h: 173;
   --accent-s: 100%;
@@ -184,24 +192,47 @@ body {
 }
 
 .theme-dark {
-  --aw-brand: #00897c;
-  --aw-link: #6cb2f0;
-  --aw-link-missing: #ff6b6b;
-  --aw-link-external: #5cc463;
-  --aw-border: #454545;
-  --aw-quote-bar: #5fa85b;
-  --aw-quote-bg: #2a2b2e;
+  /* Sampled from a Namu Wiki dark-mode screenshot (2026-11) */
+  --aw-brand: #2e3033;          /* top bar */
+  --aw-link: #ec9f19;           /* links and section numbers */
+  --aw-link-missing: #ff6b6b;   /* not in the sample; estimate */
+  --aw-link-external: #009900;  /* external links */
+  --aw-border: #383b40;         /* rules and table lines */
+  --aw-category-border: #5c5c5c;
+  --aw-panel-border: #444444;
+  --aw-box-header: #2d2f34;     /* table header cells, boxed headers */
+  --aw-quote-bar: #5fa85b;      /* not in the sample; estimate */
+  --aw-quote-bg: #2d2f34;
+  --aw-fold-arrow: #666666;     /* fold chevron next to headings */
   --aw-on-brand: #ffffff;
 
-  --accent-h: 173;
-  --accent-s: 70%;
-  --accent-l: 42%;
+  --accent-h: 37;
+  --accent-s: 85%;
+  --accent-l: 51%;
 
-  --background-primary: #1f2023;
-  --background-secondary: #18191b;
-  --text-normal: #dddddd;
-  --text-muted: #9a9a9a;
+  --background-primary: #1c1d1f;
+  --background-primary-alt: #2d2f34;
+  --background-secondary: #000000;
+  --background-secondary-alt: #1c1d1f;
+  --background-modifier-border: var(--aw-panel-border);
+  --divider-color: var(--aw-panel-border);
+  --text-normal: #e0e0e0;
+  --text-muted: #afafb0;
+  --text-faint: #8f8f90;
   --hr-color: var(--aw-border);
+  --metadata-border-color: var(--aw-category-border);
+  --table-header-background: var(--aw-box-header);
+  --table-header-background-hover: var(--aw-box-header);
+}
+
+/* H2-start mode: shift the scale so H2 looks like a top-level wiki section */
+body.aw-numbers-from-h2 {
+  --h1-size: 2.1em;
+  --h2-size: 1.8em;
+  --h3-size: 1.5em;
+  --h4-size: 1.3em;
+  --h5-size: 1.15em;
+  --h6-size: 1.05em;
 }
 
 /* ---------- 2. Brand-colored tab bar ---------- */
@@ -239,6 +270,14 @@ body:not(.aw-no-heading-rule) .markdown-rendered :is(h1, h2, h3, h4, h5, h6) {
 body:not(.aw-no-heading-rule) .markdown-source-view.mod-cm6.is-live-preview .HyperMD-header {
   border-bottom: 1px solid var(--aw-border);
   padding-bottom: 0.15em;
+}
+
+/* Fold arrows stay visible, in a quiet grey */
+body:not(.aw-hide-fold-arrows) .markdown-rendered .heading-collapse-indicator,
+body:not(.aw-hide-fold-arrows) .markdown-source-view.mod-cm6 .HyperMD-header .cm-fold-indicator .collapse-indicator {
+  opacity: 1;
+  --collapse-icon-color: var(--aw-fold-arrow);
+  color: var(--aw-fold-arrow);
 }
 
 /* ---------- 4. Section numbers ----------

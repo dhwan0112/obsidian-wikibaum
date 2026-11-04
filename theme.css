@@ -57,6 +57,12 @@ settings:
     type: class-toggle
     default: false
   -
+    id: aw-no-sidebar-cards
+    title: Plain Bases panels in the right sidebar
+    description: Turn off the wiki-style box for Bases list views docked in the right sidebar.
+    type: class-toggle
+    default: false
+  -
     id: aw-colors
     title: Colors
     type: heading
@@ -420,4 +426,79 @@ body.aw-numbers-from-h2.aw-numbers-live-preview:not(.aw-no-heading-numbers) .is-
 }
 .markdown-rendered .internal-link.is-unresolved {
   text-decoration: none;
+}
+
+/* ---------- 9. Sidebar boxes for Bases panels ----------
+ * A Bases view docked in the right sidebar becomes a wiki-style box:
+ * the view name is the box title and each row reads "name ... value".
+ * Designed for list views (see examples/). Scoped to the right sidebar,
+ * so Bases opened in the main area keep their normal look.
+ */
+
+body:not(.aw-no-sidebar-cards) .mod-right-split .workspace-leaf-content[data-type="bases"] {
+  margin: var(--size-4-2);
+  height: calc(100% - 2 * var(--size-4-2));
+  background-color: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* Box title: the view name; other toolbar buttons appear on hover */
+body:not(.aw-no-sidebar-cards) .mod-right-split .workspace-leaf-content[data-type="bases"] .bases-header {
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+body:not(.aw-no-sidebar-cards) .mod-right-split .workspace-leaf-content[data-type="bases"] .bases-toolbar-views-menu {
+  --bases-toolbar-label-display: inline;
+}
+body:not(.aw-no-sidebar-cards) .mod-right-split .workspace-leaf-content[data-type="bases"] .bases-toolbar-views-menu .text-button-icon {
+  display: none;
+}
+body:not(.aw-no-sidebar-cards) .mod-right-split .workspace-leaf-content[data-type="bases"] .bases-toolbar-views-menu .text-button-label {
+  color: var(--text-normal);
+  font-size: var(--font-ui-medium);
+  font-weight: 700;
+}
+body:not(.aw-no-sidebar-cards) .mod-right-split .workspace-leaf-content[data-type="bases"] .bases-toolbar-item:not(.bases-toolbar-views-menu) {
+  opacity: 0;
+  transition: opacity 0.15s ease-in-out;
+}
+body:not(.aw-no-sidebar-cards) .mod-right-split .workspace-leaf-content[data-type="bases"]:is(:hover, :focus-within) .bases-toolbar-item {
+  opacity: 1;
+}
+
+/* Rows: name on the left, value (time, count) on the right */
+body:not(.aw-no-sidebar-cards) .mod-right-split .bases-view[data-view-type="list"] {
+  --bases-view-padding: var(--size-4-1) 0 var(--size-4-2);
+}
+body:not(.aw-no-sidebar-cards) .mod-right-split .bases-view[data-view-type="list"] .bases-list-item {
+  box-sizing: border-box;
+  width: 100%;
+  margin-inline-start: 0;
+  padding-inline: var(--size-4-3);
+}
+body:not(.aw-no-sidebar-cards) .mod-right-split .bases-view[data-view-type="list"] .bases-list-item:hover {
+  background-color: var(--background-modifier-hover);
+}
+body:not(.aw-no-sidebar-cards) .mod-right-split .bases-view[data-view-type="list"] :is(.list-bullet, .bases-list-separator) {
+  display: none;
+}
+body:not(.aw-no-sidebar-cards) .mod-right-split .bases-view[data-view-type="list"] .bases-list-item-properties {
+  display: flex;
+  align-items: baseline;
+  gap: var(--size-4-2);
+}
+body:not(.aw-no-sidebar-cards) .mod-right-split .bases-view[data-view-type="list"] .bases-list-property:first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+body:not(.aw-no-sidebar-cards) .mod-right-split .bases-view[data-view-type="list"] .bases-list-property:not(:first-child) {
+  flex: none;
+  margin-inline-start: auto;
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+  white-space: nowrap;
 }

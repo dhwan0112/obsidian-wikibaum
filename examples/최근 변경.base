@@ -1,0 +1,20 @@
+filters:
+  and:
+    - file.ext == "md"
+formulas:
+  updated: file.mtime.relative()
+properties:
+  file.name:
+    displayName: 문서
+  formula.updated:
+    displayName: 수정
+views:
+  - type: list
+    name: 최근 변경
+    order:
+      - file.name
+      - formula.updated
+    sort:
+      - property: file.mtime
+        direction: DESC
+    limit: 10

@@ -1,0 +1,20 @@
+filters:
+  and:
+    - file.ext == "md"
+formulas:
+  backlinks: file.backlinks.length
+properties:
+  file.name:
+    displayName: 문서
+  formula.backlinks:
+    displayName: 참조
+views:
+  - type: list
+    name: 많이 참조된 문서
+    order:
+      - file.name
+      - formula.backlinks
+    sort:
+      - property: formula.backlinks
+        direction: DESC
+    limit: 10

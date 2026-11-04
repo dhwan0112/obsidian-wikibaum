@@ -1,4 +1,4 @@
-# Arbor Wiki
+# Wikibaum
 
 A Korean-wiki-style theme for Obsidian, with light and dark modes.
 

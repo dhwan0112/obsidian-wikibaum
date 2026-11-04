@@ -395,8 +395,10 @@ body:not(.aw-hide-fold-arrows) .markdown-source-view.mod-cm6 .HyperMD-header .cm
   color: var(--aw-fold-arrow);
 }
 
-/* Reading view: the fold arrow sits inside the heading, before the number, as on the wiki */
-body:not(.aw-hide-fold-arrows) .markdown-rendered :is(h1, h2, h3, h4, h5, h6):has(> .heading-collapse-indicator) {
+/* Reading view: the fold arrow sits inside the heading, before the number, as on the wiki.
+ * Only headings that get a fold arrow: reading-view headings (in .el-h* wrappers)
+ * while heading folding is on (no parent selector, which is slow to invalidate). */
+body:not(.aw-hide-fold-arrows) .markdown-preview-view.allow-fold-headings :is(.el-h1, .el-h2, .el-h3, .el-h4, .el-h5, .el-h6) > :is(h1, h2, h3, h4, h5, h6) {
   position: relative;
   padding-left: 28px;
 }

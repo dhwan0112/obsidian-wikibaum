@@ -172,6 +172,9 @@ body {
 
   --callout-radius: 0;
   --code-radius: 0;
+
+  /* Wiki bullets use the body text color, not a faint grey */
+  --list-marker-color: var(--text-normal);
 }
 
 .theme-light {
@@ -222,6 +225,26 @@ body {
   --background-secondary-alt: #1c1d1f;
   --background-modifier-border: var(--aw-panel-border);
   --divider-color: var(--aw-panel-border);
+  /* Companion plugin: sidebar cards, section rail, floating buttons */
+  --aw-card-bg: #1c1d1f;
+  --aw-card-border: #444444;
+  --aw-card-icon: #7e7e7f;
+  --aw-card-progress: #474849;
+  --aw-rail-dot-major: #c2c2c2;
+  --aw-rail-dot-minor: #888888;
+  --aw-rail-label-bg: #000000;
+  --aw-rail-label-hover: #262626;
+  --aw-rail-border: #444444;
+  --aw-float-bg: #000000;
+  --aw-float-border: #333333;
+  --aw-float-divider: #191919;
+  --aw-float-icon: #a8a8a8;
+  --aw-float-hover: #262626;
+  --aw-toc-bg: #000000;
+  --aw-toc-border: #444444;
+  --aw-toc-scroll-track: #171717;
+  --aw-toc-scroll-thumb: #959595;
+
   --text-normal: #e0e0e0;
   --text-muted: #afafb0;
   --text-faint: #8f8f90;

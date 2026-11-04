@@ -63,11 +63,21 @@ settings:
     type: class-toggle
     default: false
   -
-    id: aw-plain-graph
-    title: Plain graph colors
-    description: Use Obsidian's default grey graph instead of the wiki palette.
-    type: class-toggle
-    default: false
+    id: aw-graph-palette
+    title: Graph colors
+    type: class-select
+    allowEmpty: false
+    default: aw-graph-quiet
+    options:
+      -
+        label: Quiet (grey notes, accent on the open note)
+        value: aw-graph-quiet
+      -
+        label: Wiki links (notes in the link color)
+        value: aw-graph-links
+      -
+        label: Obsidian default
+        value: aw-graph-default
   -
     id: aw-colors
     title: Colors
@@ -275,37 +285,62 @@ body.aw-numbers-from-h2 {
 }
 
 /* ---------- Graph view ----------
- * Same meaning as links in the text: existing notes take the link color,
- * missing notes the unresolved-link red, and the open note stands out in white.
+ * Quiet (default): notes read like body text, the open note and hovered links
+ * take the link color, as on a wiki page where orange marks what you can follow.
+ * Wiki links: every existing note in the link color.
+ * Unresolved nodes are drawn by Obsidian at reduced opacity, so they get a lighter base.
  */
-body.theme-dark:not(.aw-plain-graph) {
-  --graph-node: var(--aw-link);
-  --graph-node-unresolved: var(--aw-link-missing);
-  --graph-node-focused: #ffffff;
-  --graph-node-tag: #5cc463;
-  --graph-node-attachment: #6cb2f0;
-  --graph-line: #4a4d52;
+body.theme-dark:not(.aw-graph-default) {
+  --graph-node: #c2c2c2;
+  --graph-node-unresolved: #888888;
+  --graph-node-focused: var(--aw-link);
+  --graph-node-tag: var(--aw-link-external);
+  --graph-node-attachment: #6e6e6e;
+  --graph-line: #383b40;
   --graph-text: #e0e0e0;
   --aw-graph-line-highlight: var(--aw-link);
+  --aw-graph-node-highlight: var(--aw-link);
+  --aw-graph-bg: #1c1d1f;
+}
+body.theme-dark.aw-graph-links {
+  --graph-node: var(--aw-link);
+  --graph-node-unresolved: #b5b5b6;
+  --graph-node-focused: #ffffff;
   --aw-graph-node-highlight: #ffffff;
 }
-body.theme-light:not(.aw-plain-graph) {
-  --graph-node: var(--aw-link);
-  --graph-node-unresolved: var(--aw-link-missing);
-  --graph-node-focused: var(--aw-brand);
-  --graph-node-tag: #008000;
-  --graph-node-attachment: #7a5cc2;
-  --graph-line: #c4c4c4;
+body.theme-light:not(.aw-graph-default) {
+  --graph-node: #6c757d;
+  --graph-node-unresolved: #adb5bd;
+  --graph-node-focused: var(--aw-link);
+  --graph-node-tag: var(--aw-link-external);
+  --graph-node-attachment: #b0b0b0;
+  --graph-line: #d6d6d6;
   --graph-text: #373a3c;
   --aw-graph-line-highlight: var(--aw-link);
+  --aw-graph-node-highlight: var(--aw-link);
+  --aw-graph-bg: #ffffff;
+}
+body.theme-light.aw-graph-links {
+  --graph-node: var(--aw-link);
+  --graph-node-unresolved: #adb5bd;
+  --graph-node-focused: var(--aw-brand);
   --aw-graph-node-highlight: var(--aw-brand);
 }
 /* Hover colors have no variable; the graph reads them from these classes */
-body:not(.aw-plain-graph) .graph-view.color-line-highlight {
+body:not(.aw-graph-default) .graph-view.color-line-highlight {
   color: var(--aw-graph-line-highlight);
 }
-body:not(.aw-plain-graph) .graph-view.color-fill-highlight {
+body:not(.aw-graph-default) .graph-view.color-fill-highlight {
   color: var(--aw-graph-node-highlight);
+}
+
+/* Graph on a panel, like the article box on the wiki */
+body:not(.aw-graph-default) .workspace-leaf-content:is([data-type="graph"], [data-type="localgraph"]) .view-content {
+  background-color: var(--aw-graph-bg, var(--background-primary));
+}
+body:not(.aw-graph-default) .mod-right-split .workspace-leaf-content[data-type="localgraph"] .view-content {
+  border-radius: 5px;
+  box-shadow: inset 0 0 0 1px var(--aw-card-border, var(--background-modifier-border));
 }
 
 /* Graph settings panel as a wiki card */

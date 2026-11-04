@@ -14,7 +14,7 @@ Visual direction inspired by Namu Wiki. This project is not affiliated with or e
 - Dashed quote box with a green side bar
 - Full-grid tables and a boxed properties area
 - Heading fold arrows that stay visible, in front of the section number
-- Graph view colors that match the links: existing notes in the link color, missing notes in red
+- Graph view on a panel, with quiet grey notes and the open note in the link color
 - Wiki-style boxes for Bases panels docked in the right sidebar (see below)
 - Korean-first font stack (Pretendard, Noto Sans KR, Apple SD Gothic Neo, Malgun Gothic). Fonts are not bundled; install Pretendard for the intended look.
 
@@ -27,7 +27,7 @@ With the [Style Settings](https://github.com/mgmeyers/obsidian-style-settings) p
 - remove the colored tab bar or heading underlines
 - show heading fold arrows only on hover
 - turn off the sidebar boxes for Bases panels
-- use Obsidian's plain grey graph colors
+- pick the graph colors: Quiet (default), Wiki links (every note in the link color) or Obsidian default
 - change the brand, link, unresolved-link and external-link colors
 
 ## Sidebar boxes (Recent changes, Most linked)

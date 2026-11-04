@@ -4,7 +4,7 @@ A Korean-wiki-style theme for Obsidian, with light and dark modes.
 
 Visual direction inspired by Namu Wiki. This project is not affiliated with or endorsed by Namu Wiki.
 
-![Arbor Wiki screenshot](screenshot.png)
+![Wikibaum screenshot](screenshot.png)
 
 ## Features
 
